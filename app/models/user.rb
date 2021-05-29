@@ -7,6 +7,8 @@ class User < ApplicationRecord
             length: {minimum: 6},
             if: -> { new_record? || !password.nil? }
 
+  has_many :posts
+
   def as_json(options={})
     super(options.merge({ except: [:password_digest] }))
   end
