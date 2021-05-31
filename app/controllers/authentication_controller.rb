@@ -14,6 +14,11 @@ class AuthenticationController < ApplicationController
     end
   end
 
+  # GET /auth/me
+  def me
+    render json: @current_user, status: :ok
+  end
+
   private
 
   def login_params
