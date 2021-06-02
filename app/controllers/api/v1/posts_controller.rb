@@ -24,6 +24,16 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  # PUT /posts/{id}
+  def update
+    if @post.update(post_params)
+      render json: @post, status: :ok
+    else
+      render json: { errors: @post.errors },
+              status: :unprocessable_entity
+    end
+  end
+
   # DELETE /posts/{id}
   def destroy
     @post.destroy
