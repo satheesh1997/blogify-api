@@ -4,7 +4,12 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = @current_user.posts.all
+    posts_status = request.query_parameters["status"]
+    if !posts_status or posts_status == "all"
+      @posts = @current_user.posts.all
+    else
+      @posts = @current_user.posts.where({status: posts_status})
+    end
     render json: @posts, status: :ok
   end
 
