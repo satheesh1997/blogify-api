@@ -11,5 +11,12 @@ class Post < ApplicationRecord
 
   def default_values
     self.status ||= "draft"
+    if self.content
+      self.excerpt = ActionController::Base.helpers.strip_tags(self.content.truncate(200))
+    end
+  end
+
+  def as_json(options={})
+    super(options.merge({ except: [:post_status] }))
   end
 end
