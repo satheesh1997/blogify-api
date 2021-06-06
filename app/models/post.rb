@@ -5,14 +5,17 @@ class Post < ApplicationRecord
 
   belongs_to :user
 
-  before_save :default_values
+  before_save :auto_generate_fields
 
   enum post_status: [:draft, :published, :archieved]
 
-  def default_values
+  def auto_generate_fields
     self.status ||= "draft"
     if self.content
       self.excerpt = ActionController::Base.helpers.strip_tags(self.content.truncate(200))
+    end
+    if self.title and self.status == :draft
+      self.slug = self.title.parameterize.truncate(100) # max length of slug is 100
     end
   end
 
