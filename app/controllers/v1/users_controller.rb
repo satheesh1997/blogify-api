@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class V1::UsersController < ApplicationController
   before_action :authorize_request, except: :create
   before_action :set_user, except: %i[create index]
 

@@ -1,4 +1,4 @@
-class Api::V1::PostsController < ApplicationController
+class V1::PostsController < ApplicationController
   before_action :authorize_request
   before_action :set_post, except: %i[create index]
 
