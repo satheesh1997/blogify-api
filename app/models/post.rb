@@ -14,7 +14,7 @@ class Post < ApplicationRecord
     if self.content
       self.excerpt = ActionController::Base.helpers.strip_tags(self.content.truncate(200))
     end
-    if self.title and self.status == :draft
+    if self.title and self.status == :draft.to_s
       self.slug = self.title.parameterize.truncate(100) # max length of slug is 100
     end
   end
