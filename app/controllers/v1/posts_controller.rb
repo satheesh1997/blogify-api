@@ -44,6 +44,20 @@ class V1::PostsController < ApplicationController
     render json: {}, status: :no_content
   end
 
+  # GET /posts/{id}/publish
+  def publish
+    if @post.status == :published.to_s
+      render json: @post, status: :not_modified
+    else
+      if @post.update(status: :published.to_s)
+        render json: @post, status: :ok
+      else
+        render json: {errors: @post.errors },
+                status: :unprocessable_entity
+      end
+    end
+  end
+
   private
 
   def set_post
