@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_06_152232) do
+ActiveRecord::Schema.define(version: 2021_06_12_154609) do
+
+  create_table "post_user_actions", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.integer "user_id", null: false
+    t.integer "action"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index "\"post\", \"action\"", name: "index_post_user_actions_on_post_and_action"
+    t.index "\"post\", \"user\", \"action\"", name: "index_post_user_actions_on_post_and_user_and_action", unique: true
+    t.index ["action"], name: "index_post_user_actions_on_action"
+    t.index ["post_id"], name: "index_post_user_actions_on_post_id"
+    t.index ["user_id"], name: "index_post_user_actions_on_user_id"
+  end
 
   create_table "posts", force: :cascade do |t|
     t.string "title"
@@ -34,5 +47,7 @@ ActiveRecord::Schema.define(version: 2021_06_06_152232) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "post_user_actions", "posts"
+  add_foreign_key "post_user_actions", "users"
   add_foreign_key "posts", "users"
 end
