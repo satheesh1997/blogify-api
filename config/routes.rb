@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
     # additional resource actions
     get 'posts/:_id/publish/', to: 'posts#publish'
+    get 'posts/:_id/like/', to: 'posts#like'
 
     # public end points
     get '/:_username/:_slug/', to: 'public#get_user_post'

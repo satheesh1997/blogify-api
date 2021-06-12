@@ -1,6 +1,7 @@
 class V1::PostsController < ApplicationController
   before_action :authorize_request
   before_action :set_post, except: %i[create index]
+  before_action :is_not_author, only: [:like]
 
   # GET /posts
   def index
@@ -58,12 +59,23 @@ class V1::PostsController < ApplicationController
     end
   end
 
+  # GET /posts/{id}/like/
+  def like
+    render json: {}, status: :ok
+  end
+
   private
 
   def set_post
     @post = @current_user.posts.find_by_id!(params[:_id])
     rescue ActiveRecord::RecordNotFound
       render json: { errors: 'Post not found' }, status: :not_found
+  end
+
+  def is_not_author
+    if @current_user == @post.user
+      render json: { errors: 'Author cannot perform this action' }, status: :precondition_failed
+    end
   end
 
   def post_params
