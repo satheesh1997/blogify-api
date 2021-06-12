@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   validates :image, format: { with: URI::regexp(%w[http https]) }
 
   belongs_to :user
+  has_many :post_user_actions
 
   before_save :auto_generate_fields
 
