@@ -61,7 +61,21 @@ class V1::PostsController < ApplicationController
 
   # GET /posts/{id}/like/
   def like
-    render json: {}, status: :ok
+    if @post.post_user_actions
+        .where(user: @current_user)
+        .where(action: PostUserAction::ACTIONS[:like])
+        .present?
+      render json: {
+        errors: 'You have already performed this action'
+      }, status: :precondition_failed
+    else
+      # delete old actions if any present for this user
+      @post.post_user_actions.destroy_all(user: @current_user)
+      # create a new like action record from this user
+      @post.post_user_actions.create(
+        user: @current_user, action: PostUserAction::ACTIONS[:like])
+      render json: { message: 'Action success' }, status: :ok
+    end
   end
 
   private
