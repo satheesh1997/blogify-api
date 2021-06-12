@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     resources :users, param: :_username
     resources :posts, param: :_id
     get 'posts/:_id/publish/', to: 'posts#publish'
+
+    # public end points
+    get '/:_username/:_slug/', to: 'public#get_user_post'
   end
 
 end
