@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :users, param: :_username
     resources :posts, param: :_id
+    resources :post_user_actions, param: :_post_id
 
     # additional resource actions
     get 'posts/:_id/publish/', to: 'posts#publish'
-    get 'posts/:_id/like/', to: 'posts#like'
 
     # public end points
     get '/:_username/:_slug/', to: 'public#get_user_post'
