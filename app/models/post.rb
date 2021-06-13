@@ -10,6 +10,13 @@ class Post < ApplicationRecord
 
   enum post_status: [:draft, :published, :archieved]
 
+  def meta
+    return {
+      'likes': self.post_user_actions.where(:action => PostUserAction::ACTIONS[:like]).count,
+      'dislikes': self.post_user_actions.where(:action => PostUserAction::ACTIONS[:dislike]).count
+    }
+  end
+
   def auto_generate_fields
     self.status ||= "draft"
     if self.content
@@ -21,6 +28,6 @@ class Post < ApplicationRecord
   end
 
   def as_json(options={})
-    super(options.merge({ except: [:post_status] }))
+    super(options.merge({ :except => [:post_status], :methods => [:meta] }))
   end
 end
