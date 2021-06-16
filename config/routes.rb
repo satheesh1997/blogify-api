@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :users, param: :_username
     resources :posts, param: :_id
     resources :post_user_actions, param: :_post_id
+    resources :post_comments, param: :_id
 
     # additional resource actions
     get 'posts/:_id/publish/', to: 'posts#publish'
