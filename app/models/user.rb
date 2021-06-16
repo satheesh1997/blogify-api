@@ -8,6 +8,7 @@ class User < ApplicationRecord
             if: -> { new_record? || !password.nil? }
 
   has_many :posts
+  has_many :post_comments
   has_many :post_user_actions
 
   def as_json(options = {})
