@@ -13,5 +13,4 @@ Rails.application.routes.draw do
     # public end points
     get '/:_username/:_slug/', to: 'public#get_user_post'
   end
-
 end

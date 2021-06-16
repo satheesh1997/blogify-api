@@ -4,14 +4,13 @@ class User < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :username, presence: true, uniqueness: true
   validates :password,
-            length: {minimum: 6},
+            length: { minimum: 6 },
             if: -> { new_record? || !password.nil? }
 
   has_many :posts
   has_many :post_user_actions
 
-  def as_json(options={})
+  def as_json(options = {})
     super(options.merge({ except: [:password_digest] }))
   end
-                
 end

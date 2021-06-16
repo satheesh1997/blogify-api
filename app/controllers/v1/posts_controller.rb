@@ -4,11 +4,11 @@ class V1::PostsController < ApplicationController
 
   # GET /posts
   def index
-    if params[:status] == "all" or !params[:status]
-      @posts = @current_user.posts.all
-    else
-      @posts = @current_user.posts.where({status: params[:status]})
-    end
+    @posts = if (params[:status] == 'all') || !params[:status]
+               @current_user.posts.all
+             else
+               @current_user.posts.where({ status: params[:status] })
+             end
     render json: @posts, status: :ok
   end
 
@@ -23,8 +23,8 @@ class V1::PostsController < ApplicationController
     if @post.save
       render json: @post, status: :created
     else
-      render json: { erros: @post.errors },
-              status: :unprocessable_entity
+      render json: { errors: @post.errors },
+             status: :unprocessable_entity
     end
   end
 
@@ -34,7 +34,7 @@ class V1::PostsController < ApplicationController
       render json: @post, status: :ok
     else
       render json: { errors: @post.errors },
-              status: :unprocessable_entity
+             status: :unprocessable_entity
     end
   end
 
@@ -48,13 +48,11 @@ class V1::PostsController < ApplicationController
   def publish
     if @post.status == :published.to_s
       render json: @post, status: :not_modified
+    elsif @post.update(status: :published.to_s)
+      render json: @post, status: :ok
     else
-      if @post.update(status: :published.to_s)
-        render json: @post, status: :ok
-      else
-        render json: {errors: @post.errors },
-                status: :unprocessable_entity
-      end
+      render json: { errors: @post.errors },
+             status: :unprocessable_entity
     end
   end
 
@@ -62,12 +60,11 @@ class V1::PostsController < ApplicationController
 
   def set_post
     @post = @current_user.posts.find_by_id!(params[:_id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'Post not found' }, status: :not_found
+  rescue ActiveRecord::RecordNotFound
+    render json: { errors: 'Post not found' }, status: :not_found
   end
 
   def post_params
     params.permit(:title, :content, :image)
   end
-
 end

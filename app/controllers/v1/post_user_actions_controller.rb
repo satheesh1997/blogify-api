@@ -20,30 +20,28 @@ class V1::PostUserActionsController < ApplicationController
       render json: {
         errors: 'Author cannot perform this action'
       }, status: :precondition_failed
+    elsif @current_user.post_user_actions
+                       .where(
+                         post_id: params[:post_id],
+                         action: @current_user_action
+                       ).present?
+      render json: {
+        errors: 'You have already performed this action'
+      }, status: :precondition_failed
     else
-      if @current_user.post_user_actions
-          .where(
-            :post_id => params[:post_id],
-            :action => @current_user_action
-          ).present?
-        render json: {
-          errors: 'You have already performed this action'
-        }, status: :precondition_failed
+      @current_user.post_user_actions
+                   .where(user: @current_user)
+                   .destroy_all
+      post_user_action = @current_user.post_user_actions.new(
+        post: @post,
+        action: @current_user_action
+      )
+      if post_user_action.save
+        render json: post_user_action, status: :ok
       else
-        @current_user.post_user_actions
-            .where(:user => @current_user)
-            .destroy_all
-        post_user_action = @current_user.post_user_actions.new(
-          post: @post,
-          action: @current_user_action
-        )
-        if post_user_action.save
-          render json: post_user_action , status: :ok
-        else
-          render json: {
-            errors: post_user_action.errors
-          }, status: :unprocessable_entity
-        end
+        render json: {
+          errors: post_user_action.errors
+        }, status: :unprocessable_entity
       end
     end
   end
@@ -52,16 +50,16 @@ class V1::PostUserActionsController < ApplicationController
 
   def set_post
     @post = Post.find_by_id!(params[:_post_id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'Post not found' }, status: :not_found
+  rescue ActiveRecord::RecordNotFound
+    render json: { errors: 'Post not found' }, status: :not_found
   end
 
   def validate_user_action
-    if !params[:user_action] or !PostUserAction::ACTIONS.keys.include?(
-        params[:user_action].to_sym
+    if !params[:user_action] || !PostUserAction::ACTIONS.keys.include?(
+      params[:user_action].to_sym
     )
       render json: {
-        errors: { user_action: "invalid action" }
+        errors: { user_action: 'invalid action' }
       }, status: :unprocessable_entity
     else
       @current_user_action = PostUserAction::ACTIONS[
