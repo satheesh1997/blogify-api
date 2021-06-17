@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :posts, param: :_id
     resources :post_user_actions, param: :_post_id
     resources :post_comments, param: :_id
-    resources :post_comment_likes, param: :_id
+    resources :post_comment_likes, param: :_post_comment_id
 
     # additional resource actions
     get "posts/:_id/publish/", to: "posts#publish"
