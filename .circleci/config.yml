@@ -5,7 +5,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:3.1
+      - image: circleci/ruby:3.0.1-buster-node-browsers-legacy
     executor: ruby/default
     steps:
       - checkout
