@@ -12,16 +12,16 @@ module V1
 
     def create
       begin
-        @post = Post.find_by_id!(params[:post_id])
+        @post = Post.find(params[:post_id])
       rescue ActiveRecord::RecordNotFound
         return render json: {
-          errors: { post_id: 'Post not found' }
+          errors: { post_id: "Post not found" }
         }, status: :not_found
       end
 
       if @current_user == @post.user
         render json: {
-          errors: 'Author cannot perform this action'
+          errors: "Author cannot perform this action"
         }, status: :precondition_failed
       elsif @current_user.post_user_actions
                          .where(
@@ -29,7 +29,7 @@ module V1
                            action: @current_user_action
                          ).present?
         render json: {
-          errors: 'You have already performed this action'
+          errors: "You have already performed this action"
         }, status: :precondition_failed
       else
         @current_user.post_user_actions
@@ -50,29 +50,26 @@ module V1
     end
 
     private
-
-    def set_post
-      @post = Post.find_by_id!(params[:_post_id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'Post not found' }, status: :not_found
-    end
-
-    def validate_user_action
-      if !params[:user_action] || !PostUserAction::ACTIONS.keys.include?(
-        params[:user_action].to_sym
-      )
-        render json: {
-          errors: { user_action: 'invalid action' }
-        }, status: :unprocessable_entity
-      else
-        @current_user_action = PostUserAction::ACTIONS[
-          params[:user_action].to_sym
-        ]
+      def set_post
+        @post = Post.find(params[:_post_id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "Post not found" }, status: :not_found
       end
-    end
 
-    def post_user_action_params
-      params.permit(:post_id, :action)
-    end
+      def validate_user_action
+        if !params[:user_action] || !PostUserAction::ACTIONS.key?(params[:user_action].to_sym)
+          render json: {
+            errors: { user_action: "invalid action" }
+          }, status: :unprocessable_entity
+        else
+          @current_user_action = PostUserAction::ACTIONS[
+            params[:user_action].to_sym
+          ]
+        end
+      end
+
+      def post_user_action_params
+        params.permit(:post_id, :action)
+      end
   end
 end

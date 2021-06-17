@@ -7,11 +7,11 @@ module V1
 
     # GET /posts
     def index
-      @posts = if (params[:status] == 'all') || !params[:status]
-                 @current_user.posts.all
-               else
-                 @current_user.posts.where({ status: params[:status] })
-               end
+      @posts = if (params[:status] == "all") || !params[:status]
+        @current_user.posts.all
+      else
+        @current_user.posts.where({ status: params[:status] })
+      end
       render json: @posts, status: :ok
     end
 
@@ -60,15 +60,14 @@ module V1
     end
 
     private
+      def set_post
+        @post = @current_user.posts.find(params[:_id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "Post not found" }, status: :not_found
+      end
 
-    def set_post
-      @post = @current_user.posts.find_by_id!(params[:_id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'Post not found' }, status: :not_found
-    end
-
-    def post_params
-      params.permit(:title, :content, :image)
-    end
+      def post_params
+        params.permit(:title, :content, :image)
+      end
   end
 end

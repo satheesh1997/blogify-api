@@ -36,15 +36,14 @@ module V1
     end
 
     private
+      def set_user
+        @user = User.find_by!(username: params[:_username])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "User not found" }, status: :not_found
+      end
 
-    def set_user
-      @user = User.find_by_username!(params[:_username])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'User not found' }, status: :not_found
-    end
-
-    def user_params
-      params.permit(:name, :username, :email, :password, :password_confirmation)
-    end
+      def user_params
+        params.permit(:name, :username, :email, :password, :password_confirmation)
+      end
   end
 end
