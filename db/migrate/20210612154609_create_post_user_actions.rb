@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePostUserActions < ActiveRecord::Migration[6.1]
   def change
     create_table :post_user_actions do |t|

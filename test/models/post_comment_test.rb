@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class PostUserActionTest < ActiveSupport::TestCase
+class PostCommentTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

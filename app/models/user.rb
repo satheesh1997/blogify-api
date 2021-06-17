@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   has_secure_password
   validates :email, presence: true, uniqueness: true
@@ -8,6 +10,7 @@ class User < ApplicationRecord
             if: -> { new_record? || !password.nil? }
 
   has_many :posts
+  has_many :post_comments
   has_many :post_user_actions
 
   def as_json(options = {})
