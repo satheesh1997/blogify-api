@@ -10,7 +10,7 @@ class CreatePostUserActions < ActiveRecord::Migration[6.1]
       t.timestamps
     end
     add_index :post_user_actions, :action
-    add_index :post_user_actions, %i[post action]
-    add_index :post_user_actions, %i[post user action], unique: true
+    add_index :post_user_actions, %i[post_id action]
+    add_index :post_user_actions, %i[post_id user_id action], unique: true
   end
 end
