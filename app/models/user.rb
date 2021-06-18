@@ -10,9 +10,9 @@ class User < ApplicationRecord
             if: -> { new_record? || !password.nil? }
 
   has_many :posts
-  has_many :post_comments
-  has_many :post_comment_likes
-  has_many :post_user_actions
+  has_many :post_comments, dependent: :destroy
+  has_many :post_comment_likes, dependent: :destroy
+  has_many :post_user_actions, dependent: :destroy
 
   def as_json(options = {})
     super(options.merge({ except: [:password_digest] }))

@@ -6,8 +6,8 @@ class Post < ApplicationRecord
   validates :image, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }
 
   belongs_to :user
-  has_many :post_comments
-  has_many :post_user_actions
+  has_many :post_comments, dependent: :destroy
+  has_many :post_user_actions, dependent: :destroy
 
   before_save :auto_generate_fields
 
