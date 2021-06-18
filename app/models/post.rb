@@ -3,11 +3,12 @@
 class Post < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true
-  validates :image, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }
+  validates :image, presence: true
 
   belongs_to :user
   has_many :post_comments, dependent: :destroy
   has_many :post_user_actions, dependent: :destroy
+  has_one_attached :image
 
   before_save :auto_generate_fields
 
@@ -16,7 +17,8 @@ class Post < ApplicationRecord
   def meta
     {
       likes: post_user_actions.where(action: PostUserAction::ACTIONS[:like]).count,
-      dislikes: post_user_actions.where(action: PostUserAction::ACTIONS[:dislike]).count
+      dislikes: post_user_actions.where(action: PostUserAction::ACTIONS[:dislike]).count,
+      image: Rails.application.routes.url_helpers.rails_blob_path(self.image)
     }
   end
 
