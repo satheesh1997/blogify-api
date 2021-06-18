@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_18_042647) do
+ActiveRecord::Schema.define(version: 2021_06_17_134743) do
 
   create_table "post_comment_likes", force: :cascade do |t|
     t.integer "post_comment_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"post_comment\", \"user\"", name: "index_post_comment_likes_on_post_comment_and_user", unique: true
     t.index ["post_comment_id"], name: "index_post_comment_likes_on_post_comment_id"
     t.index ["user_id"], name: "index_post_comment_likes_on_user_id"
   end
