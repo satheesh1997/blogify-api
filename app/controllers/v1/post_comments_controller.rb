@@ -11,9 +11,15 @@ module V1
     def index
       if params[:_post_id]
         post_comments = PostComment.where(post_id: params[:_post_id])
-        render json: post_comments, status: :ok
+        render json: post_comments.as_json(
+          include: { user: { only: [:name, :id] } },
+          except: [:post_id, :user_id]),
+              status: :ok
       else
-        render json: @current_user.post_comments, status: :ok
+        render json: @current_user.post_comments.as_json(
+          include: { post: { only: [:title, :id, :excerpt] } },
+          except: [:user_id, :post_id]),
+              status: :ok
       end
     end
 
@@ -38,7 +44,10 @@ module V1
 
     # GET /post_comments/{id}/
     def show
-      render json: @post_comment, status: :ok
+      render json: @post_comment.as_json(
+        include: { post: { only: [:id, :title, :excerpt] }, user: { only: [:id, :name] } },
+        except: [:user_id, :post_id]),
+            status: :ok
     end
 
     # PUT /post_comments/{id}/
