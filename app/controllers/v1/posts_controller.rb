@@ -67,7 +67,7 @@ module V1
       end
 
       def post_params
-        params.permit(:title, :content)
+        params.permit(:title, :content, :image)
       end
   end
 end
