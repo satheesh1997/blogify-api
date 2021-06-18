@@ -3,7 +3,6 @@
 class Post < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true
-  validates :image, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }
 
   belongs_to :user
   has_many :post_comments, dependent: :destroy
