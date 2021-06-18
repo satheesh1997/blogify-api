@@ -15,6 +15,8 @@ module V1
       else
         render json: { errors: post_comment_like.errors }, status: :unprocessable_entity
       end
+    rescue ActiveRecord::RecordNotUnique
+      render json: { errors: "You have already liked this post comment" }, status: :precondition_failed
     end
 
     def show
