@@ -2,6 +2,19 @@
 
 class ServiceController < ApplicationController
   def index
-    render json: { status: "OK" }, status: :ok
+    render json: get_index_response(),
+           status: :ok
   end
+
+  private
+    def get_index_response
+      {
+        status: "OK",
+        api: {
+          current: "v1",
+          supported: [ "v1" ],
+          docs: "https://documenter.getpostman.com/view/16280044/TzeXkn56"
+        }
+      }
+    end
 end
