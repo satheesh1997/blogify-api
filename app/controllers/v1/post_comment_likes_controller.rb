@@ -5,6 +5,13 @@ module V1
     before_action :authorize_request
     before_action :set_post_comment, only: [:show]
 
+    def index
+      render json: @current_user.post_comment_likes.as_json(
+        include: { post_comment: { only: [:id, :post_id, :content] } },
+        except: [:user_id, :post_comment_id]),
+            status: :ok
+    end
+
     def create
       post_comment_like = PostCommentLike.new(
         post_comment_id: params[:post_comment_id],
@@ -15,12 +22,13 @@ module V1
       else
         render json: { errors: post_comment_like.errors }, status: :unprocessable_entity
       end
-    rescue ActiveRecord::RecordNotUnique
-      render json: { errors: "You have already liked this post comment" }, status: :precondition_failed
     end
 
     def show
-      render json @post_comment.post_comment_likes, status: :o
+      render json: @post_comment.post_comment_likes.as_json(
+        include: { user: { only: [:name, :id] } },
+        except: [:user_id, :post_comment_id]),
+            status: :ok
     end
 
     private

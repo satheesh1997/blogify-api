@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_many :posts
   has_many :post_comments
+  has_many :post_comment_likes
   has_many :post_user_actions
 
   def as_json(options = {})
