@@ -18,7 +18,7 @@ class Post < ApplicationRecord
     {
       likes: post_user_actions.where(action: PostUserAction::ACTIONS[:like]).count,
       dislikes: post_user_actions.where(action: PostUserAction::ACTIONS[:dislike]).count,
-      image: Rails.application.routes.url_helpers.rails_blob_path(self.image)
+      image: self.image != nil ? Rails.application.routes.url_helpers.rails_blob_path(self.image) : nil
     }
   end
 
@@ -28,9 +28,5 @@ class Post < ApplicationRecord
     if title && (self.status == :draft.to_s)
       self.slug = title.parameterize.truncate(100) # max length of slug is 100
     end
-  end
-
-  def as_json(options = {})
-    super(options.merge({ except: [:post_status], methods: [:meta] }))
   end
 end

@@ -12,12 +12,20 @@ module V1
       else
         @current_user.posts.where({ status: params[:status] })
       end
-      render json: @posts, status: :ok
+      render json: @posts.as_json(
+        include: {},
+        except: [:user_id, :post_status],
+        methods: [:meta]),
+            status: :ok
     end
 
     # GET /posts/{id}
     def show
-      render json: @post, status: :ok
+      render json: @post.as_json(
+        include: { user: { only: [:name, :id] } },
+        except: [:user_id, :post_status],
+        methods: [:meta]),
+             status: :ok
     end
 
     # POST /posts
@@ -34,7 +42,12 @@ module V1
     # PUT /posts/{id}
     def update
       if @post.update(post_params)
-        render json: @post, status: :ok
+        render json: @post.as_json(
+          include: {},
+          except: [:user_id, :post_status],
+          methods: [:meta]),
+               status: :ok
+
       else
         render json: { errors: @post.errors },
                status: :unprocessable_entity
@@ -50,9 +63,9 @@ module V1
     # GET /posts/{id}/publish
     def publish
       if @post.status == :published.to_s
-        render json: @post, status: :not_modified
+        render json: { message: "Post already published" }, status: :not_modified
       elsif @post.update(status: :published.to_s)
-        render json: @post, status: :ok
+        render json: { messae: "Post published successfully" }, status: :ok
       else
         render json: { errors: @post.errors },
                status: :unprocessable_entity
