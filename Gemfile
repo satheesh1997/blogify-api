@@ -6,8 +6,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.0.1"
 
 gem "bcrypt", "~> 3.1.7"
+gem "blurhash"
 gem "bootsnap", ">= 1.4.4", require: false
 gem "jwt", "~> 2.2", ">= 2.2.3"
+gem "mini_magick"
 gem "pg"
 gem "puma", "~> 5.0"
 gem "rack-cors", "~> 1.1.1"

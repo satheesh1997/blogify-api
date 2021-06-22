@@ -18,7 +18,7 @@ class Post < ApplicationRecord
     {
       likes: post_user_actions.where(action: PostUserAction::ACTIONS[:like]).count,
       dislikes: post_user_actions.where(action: PostUserAction::ACTIONS[:dislike]).count,
-      image: self.image != nil ? Rails.application.routes.url_helpers.rails_blob_path(self.image, only_path: true) : nil
+      image: self.get_image_info()
     }
   end
 
@@ -29,4 +29,15 @@ class Post < ApplicationRecord
       self.slug = title.parameterize.truncate(100) # max length of slug is 100
     end
   end
+
+  private
+    def get_image_info
+      if self.image.attached?
+        self.image.analyze
+        {
+          url: Rails.application.routes.url_helpers.rails_blob_path(self.image, only_path: true),
+          metadata: self.image.metadata
+        }
+      end
+    end
 end
