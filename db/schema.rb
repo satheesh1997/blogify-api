@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_18_202054) do
+ActiveRecord::Schema.define(version: 2021_06_27_081329) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 2021_06_18_202054) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "verbose"
+    t.string "slug"
+    t.boolean "is_visible"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["is_visible"], name: "index_categories_on_is_visible"
+    t.index ["verbose", "slug"], name: "index_categories_on_verbose_and_slug", unique: true
+  end
+
   create_table "post_comment_likes", force: :cascade do |t|
     t.integer "post_comment_id", null: false
     t.integer "user_id", null: false
@@ -55,8 +65,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_202054) do
     t.string "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"post\"", name: "index_post_comments_on_post"
-    t.index "\"post\", \"user\"", name: "index_post_comments_on_post_and_user"
+    t.index ["post_id", "user_id"], name: "index_post_comments_on_post_id_and_user_id"
     t.index ["post_id"], name: "index_post_comments_on_post_id"
     t.index ["user_id"], name: "index_post_comments_on_user_id"
   end
@@ -67,9 +76,9 @@ ActiveRecord::Schema.define(version: 2021_06_18_202054) do
     t.integer "action"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"post\", \"action\"", name: "index_post_user_actions_on_post_and_action"
-    t.index "\"post\", \"user\", \"action\"", name: "index_post_user_actions_on_post_and_user_and_action", unique: true
     t.index ["action"], name: "index_post_user_actions_on_action"
+    t.index ["post_id", "action"], name: "index_post_user_actions_on_post_id_and_action"
+    t.index ["post_id", "user_id", "action"], name: "index_post_user_actions_on_post_id_and_user_id_and_action", unique: true
     t.index ["post_id"], name: "index_post_user_actions_on_post_id"
     t.index ["user_id"], name: "index_post_user_actions_on_user_id"
   end
