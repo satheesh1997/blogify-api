@@ -52,11 +52,11 @@ ActiveRecord::Schema.define(version: 2021_06_27_091347) do
 
   create_table "post_categories", force: :cascade do |t|
     t.integer "post_id", null: false
-    t.integer "catetory_id", null: false
+    t.integer "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"post_id\", \"category_id\"", name: "index_post_categories_on_post_id_and_category_id", unique: true
-    t.index ["catetory_id"], name: "index_post_categories_on_catetory_id"
+    t.index ["category_id"], name: "index_post_categories_on_category_id"
+    t.index ["post_id", "category_id"], name: "index_post_categories_on_post_id_and_category_id", unique: true
     t.index ["post_id"], name: "index_post_categories_on_post_id"
   end
 
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_091347) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "post_categories", "catetories"
+  add_foreign_key "post_categories", "categories"
   add_foreign_key "post_categories", "posts"
   add_foreign_key "post_comment_likes", "post_comments"
   add_foreign_key "post_comment_likes", "users"

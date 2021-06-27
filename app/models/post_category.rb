@@ -2,5 +2,5 @@
 
 class PostCategory < ApplicationRecord
   belongs_to :post
-  belongs_to :catetory
+  belongs_to :category
 end
