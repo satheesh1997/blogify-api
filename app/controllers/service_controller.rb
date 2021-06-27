@@ -13,7 +13,7 @@ class ServiceController < ApplicationController
         api: {
           current: "v1",
           supported: [ "v1" ],
-          docs: "https://documenter.getpostman.com/view/16280044/TzeXkn56"
+          docs: "https://documenter.getpostman.com/view/16280044/Tzef92vE"
         }
       }
     end
