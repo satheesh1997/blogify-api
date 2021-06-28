@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # version 1 endpoints
   namespace :v1 do
     resources :users, param: :_username
+    resources :categories, param: :_id
     resources :posts, param: :_id
     resources :post_user_actions, param: :_post_id
     resources :post_comments, param: :_id
