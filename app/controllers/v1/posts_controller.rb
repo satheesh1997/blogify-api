@@ -13,7 +13,7 @@ module V1
         @current_user.posts.where({ status: params[:status] })
       end
       render json: @posts.as_json(
-        include: {},
+        include: { categories: {} },
         except: [:user_id, :post_status],
         methods: [:meta]),
             status: :ok
@@ -22,7 +22,7 @@ module V1
     # GET /posts/{id}
     def show
       render json: @post.as_json(
-        include: { user: { only: [:name, :id] } },
+        include: { user: { only: [:name, :id] }, categories: {} },
         except: [:user_id, :post_status],
         methods: [:meta]),
              status: :ok
