@@ -6,8 +6,13 @@ class Post < ApplicationRecord
   validates :image, presence: true
 
   belongs_to :user
+
+  has_many :post_categories, dependent: :destroy
   has_many :post_comments, dependent: :destroy
   has_many :post_user_actions, dependent: :destroy
+
+  has_many :categories, through: :post_categories
+
   has_one_attached :image
 
   before_save :auto_generate_fields
