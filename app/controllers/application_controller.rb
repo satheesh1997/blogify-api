@@ -13,4 +13,10 @@ class ApplicationController < ActionController::API
       render json: { errors: e.message }, status: :unauthorized
     end
   end
+
+  def owner?
+    unless @current_user.id == 1
+      render json: { errors: "Only the app owner is allowed to perform this action" }, status: :forbidden
+    end
+  end
 end

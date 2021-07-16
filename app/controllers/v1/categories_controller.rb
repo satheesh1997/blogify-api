@@ -2,12 +2,12 @@
 
 class V1::CategoriesController < ApplicationController
   before_action :authorize_request
-  before_action :set_catergory, except: %i[create index]
+  before_action :owner?, except: %i[index show]
+  before_action :set_category, except: %i[create index]
 
   # GET /categories
   def index
-    categories = Category.all
-    render json: categories, status: :ok
+    render json: Category.all, status: :ok
   end
 
   # GET /categories/{id}
@@ -46,7 +46,7 @@ class V1::CategoriesController < ApplicationController
   end
 
   private
-    def set_catergory
+    def set_category
       @category = Category.find_by_id!(params[:_id])
     rescue ActiveRecord::RecordNotFound
       render json: { errors: "Category not found" }, status: :not_found
