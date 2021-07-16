@@ -14,6 +14,10 @@ class User < ApplicationRecord
   has_many :post_comment_likes, dependent: :destroy
   has_many :post_user_actions, dependent: :destroy
 
+  def owner?
+    self.id == 1
+  end
+
   def as_json(options = {})
     super(options.merge({ except: [:password_digest] }))
   end
