@@ -51,6 +51,18 @@ class V1::CategoriesController < ApplicationController
     render json: {}, status: :no_content
   end
 
+  # GET /categories/{id}/verify
+  def verify
+    if @category.is_visible
+      return render json: {}, status: :not_modified
+    end
+    if @category.update(is_visible: true)
+      render json: @category, status: :ok
+    else
+      render json: @category.errors, status: :unprocessable_entity
+    end
+  end
+
   private
     def set_category
       @category = Category.find_by_id!(params[:_id])
