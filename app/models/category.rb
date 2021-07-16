@@ -9,4 +9,8 @@ class Category < ApplicationRecord
     self.slug = verbose.parameterize
     self.is_visible ||= false
   end
+
+  def self.search_by_verbose(verbose)
+    where("verbose LIKE ?", "%#{verbose}%")
+  end
 end

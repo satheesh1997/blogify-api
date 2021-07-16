@@ -7,7 +7,12 @@ class V1::CategoriesController < ApplicationController
 
   # GET /categories
   def index
-    render json: Category.all, status: :ok
+    if params[:q]
+      categories = Category.search_by_verbose(params[:q]).order("created_at DESC")
+    else
+      categories = Category.all.order("created_at DESC")
+    end
+    render json: categories, status: :ok
   end
 
   # GET /categories/{id}
