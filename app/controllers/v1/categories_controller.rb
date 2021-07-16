@@ -2,7 +2,7 @@
 
 class V1::CategoriesController < ApplicationController
   before_action :authorize_request
-  before_action :owner?, except: %i[index show]
+  before_action :owner?, except: %i[create index show]
   before_action :set_category, except: %i[create index]
 
   # GET /categories
@@ -18,6 +18,7 @@ class V1::CategoriesController < ApplicationController
   # POST /categories
   def create
     category = Category.new(category_params)
+    category.is_visible = @current_user.owner?
     if category.save
       render json: category, status: :created
     else
